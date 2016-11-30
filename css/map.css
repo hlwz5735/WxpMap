@@ -1,0 +1,42 @@
+.map-container {
+    width: 400px;
+    height: 400px;
+    position: relative;
+
+    overflow: hidden;
+    cursor: url("image/openhand.cur"), move;
+}
+
+.map-image {
+    width: 835px;
+    height: 800px;
+    position: absolute;
+    background-repeat: no-repeat;
+}
+
+.map-mark-container {
+    position: absolute;
+    cursor: pointer;
+}
+.map-mark-text {
+    font-size: 12px;
+    font-weight: bolder;
+    text-shadow: 1px 1px 0 #fff;
+}
+.map-mark-text > img {
+    margin-bottom: -3px;
+}
+
+.wxp-map {
+    width : 100%;
+    background: #e4e4e4;
+    max-width: 1210px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.map-container {
+    -moz-user-select:none;/*火狐*/
+    -webkit-user-select:none;/*webkit浏览器*/
+    -ms-user-select:none;/*IE10*/
+    user-select:none;
+}
