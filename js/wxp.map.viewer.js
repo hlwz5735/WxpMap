@@ -9,25 +9,7 @@
         wxpMap: function(options) {
 
             var defaults = {
-                itemArr :  [
-                    {x: 777, y: 256, name: '北京'},
-                    {x: 363, y: 172, name: '乌鲁木齐'},
-                    {x: 797, y: 325, name: '济南'},
-                    {x: 923, y: 141, name: '哈尔滨'},
-                    {x: 882, y: 228, name: '沈阳'},
-                    {x: 707, y: 243, name: '呼和浩特'},
-                    {x: 723, y: 305, name: '太原'},
-                    {x: 742, y: 365, name: '郑州'},
-                    {x: 666, y: 369, name: '西安'},
-                    {x: 869, y: 423, name: '上海'},
-                    {x: 587, y: 340, name: '兰州'},
-                    {x: 555, y: 327, name: '青藏公司'},
-                    {x: 575, y: 442, name: '成都'},
-                    {x: 792, y: 476, name: '南昌'},
-                    {x: 754, y: 438, name: '武汉'},
-                    {x: 550, y: 549, name: '昆明'},
-                    {x: 656, y: 590, name: '南宁'},
-                    {x: 744, y: 582, name: '广州'}],
+                itemArr :  [{x: 777, y: 256, name: '北京'}],
                 mapWidth: 1210,
                 mapHeight: 700,
                 mapImageUrl: 'image/map_china1.jpg'
@@ -60,16 +42,13 @@
                         elemStr += ("data-title='"+ o.itemArr[i].name +"' data-content='" + "content!" + "' data-trigger='hover' " +
                         "data-placement='top'");
                     }
-                    elemStr += ('><div class="map-mark-text">' +
-                        o.itemArr[i].name + '<img src="css/image/redPin.gif"/>' +
-                        '</div></div>');
-
+                    //处理脚标
+                    var pinImgStr = handlePinImage(o.itemArr[i]);
+                    elemStr += generateTextAndPinNode(o.itemArr[i], pinImgStr) + '</div></div>';
+                    //将节点实体化
                     var elem = $(elemStr);
-
-                    elem.css({
-                        'top': o.itemArr[i].y,
-                        'left': o.itemArr[i].x - 12 * o.itemArr[i].name.length
-                    });
+                    //处理偏移度
+                    handleOffset(o.itemArr[i], elem);
 
                     $(".map-image").append(elem);
                 }
@@ -79,6 +58,7 @@
                 var initX = 0;
                 var initY = 0;
                 var isMove = false;
+                //绑定鼠标操作，实现拖动
                 $(".map-container").mousedown(function (event) {
                     //offset 为现在的偏移量
                     offset = $('.map-image').position();
@@ -114,7 +94,9 @@
                     );
                 });
                 $('.map-image').css({'background-image': 'url("'+ o.mapImageUrl +'")'});
-                if ($.webuiPopover) $(".map-mark-container").webuiPopover();
+
+                $(".map-mark-container").webuiPopover();
+
                 var mapContainer = $(".map-container").get(0);
                 mapContainer.onselectstart = mapContainer.ondrag = function() {
                     return false;
@@ -123,6 +105,82 @@
             });
         }
     });
+
+    function handlePinImage(item) {
+        if (!item.pinImg || item.pinImg == 'redPin') {
+            return '<img src="css/image/redPin.gif"/>';
+        } else {
+            return '';
+        }
+    }
+
+    function generateTextAndPinNode(item, imgStr) {
+        if (!item.textDir || item.textDir == 'left') {
+            return '><div class="map-mark-text">' + item.name + imgStr;
+        } else if (item.textDir == 'right') {
+            return '><div class="map-mark-text">' + imgStr + item.name;
+        } else if (item.textDir == 'bottom') {
+            var tempStr = '><div class="map-mark-text">' + imgStr;
+            tempStr += ('<div style="width:16px;padding-left:2px;">' + item.name + '</div>');
+            return tempStr;
+        } else {
+            var tempStr = '><div class="map-mark-text">';
+            tempStr += ('<div style="width:16px;padding-left:1px;">' + item.name + '</div>' + imgStr);
+            return tempStr;
+        }
+    }
+
+    function handleOffset(item, elem) {
+        if (!item.textDir || item.textDir == "left") {
+            if (!item.pinImg || item.pinImg == "redPin") {
+                elem.css({
+                    'top': item.y - 6,
+                    'left': item.x - 12 * item.name.length - 12
+                });
+            } else {
+                elem.css({
+                    'top': item.y - 6,
+                    'left': item.x - 12 * item.name.length - 10
+                });
+            }
+        } else if (item.textDir == "top") {
+            if (!item.pinImg || item.pinImg == "redPin") {
+                elem.css({
+                    'top': item.y - 6 - 14 * item.name.length,
+                    'left': item.x - 7
+                });
+            } else {
+                elem.css({
+                    'top': item.y - 6 - 14 * item.name.length,
+                    'left': item.x - 8
+                });
+            }
+        } else if (item.textDir == "bottom") {
+            if (!item.pinImg || item.pinImg == "redPin") {
+                elem.css({
+                    'top': item.y - 6,
+                    'left': item.x - 10
+                });
+            } else {
+                elem.css({
+                    'top': item.y + 6,
+                    'left': item.x -7
+                });
+            }
+        } else {
+            if (!item.pinImg || item.pinImg == "redPin") {
+                elem.css({
+                    'top': item.y - 6,
+                    'left': item.x - 10
+                });
+            } else {
+                elem.css({
+                    'top': item.y - 6,
+                    'left': item.x + 4
+                });
+            }
+        }
+    }
 
     //传递jQuery到方法中，这样我们可以使用任何javascript中的变量来代替"$"
 })(jQuery);

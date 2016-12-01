@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>地图Demo1</title>
+    <link rel="stylesheet" href="css/jquery.webui-popover.css" />
     <link rel="stylesheet" href="css/map.css" />
     <style>
         .body-container {
@@ -17,13 +18,14 @@
     </style>
 </head>
 <body>
-
 <div class="body-container">
     <div class="wxp-map"></div>
 </div>
 
 <script src="js/jquery.min.js"></script>
+<script src="js/jquery.webui-popover.js"></script>
 <script src="js/wxp.map.viewer.js"></script>
+
 <script type="text/javascript">
     $(function () {
         $.getJSON("/testJSON/chinaPoints.json", function (json) {
