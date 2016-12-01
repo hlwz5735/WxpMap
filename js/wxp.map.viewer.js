@@ -31,7 +31,6 @@
                 mapWidth: 1210,
                 mapHeight: 700,
                 mapImageUrl: 'image/map_china1.jpg'
-
             };
 
             var opts = $.extend(defaults, options);
@@ -56,12 +55,16 @@
 
                 for (var i = 0; i < o.itemArr.length; i++) {
 
-                    var elem = $('<div class="map-mark-container"' +
-                        "data-title='"+ o.itemArr[i].name +"' data-content='" + "content!" + "' data-trigger='hover' " +
-                        "data-placement='top'" +
-                        '><div class="map-mark-text">' +
+                    var elemStr = '<div class="map-mark-container"';
+                    if (o.itemArr[i].content) {
+                        elemStr += ("data-title='"+ o.itemArr[i].name +"' data-content='" + "content!" + "' data-trigger='hover' " +
+                        "data-placement='top'");
+                    }
+                    elemStr += ('><div class="map-mark-text">' +
                         o.itemArr[i].name + '<img src="css/image/redPin.gif"/>' +
                         '</div></div>');
+
+                    var elem = $(elemStr);
 
                     elem.css({
                         'top': o.itemArr[i].y,
@@ -89,16 +92,16 @@
                             if (isMove) {
                                 var absX = offset.left - initX + event.pageX;
                                 if (absX > 0) absX = 0;
-                                else if (absX < containerWidth - mapWidth) {
-                                    if (mapWidth < containerWidth) absX = 0;
-                                    else absX = containerWidth - mapWidth;
+                                else if (absX < containerWidth - o.mapWidth) {
+                                    if (o.mapWidth < containerWidth) absX = 0;
+                                    else absX = containerWidth - o.mapWidth;
                                 }
 
                                 var absY = offset.top - initY + event.pageY;
                                 if (absY > 0) absY = 0;
-                                else if (absY < containerHeight - mapHeight) {
-                                    if (mapHeight < containerHeight) absY = 0;
-                                    else absY = containerHeight - mapHeight;
+                                else if (absY < containerHeight - o.mapHeight) {
+                                    if (o.mapHeight < containerHeight) absY = 0;
+                                    else absY = containerHeight - o.mapHeight;
                                 }
 
                                 $('.map-image').css({'left': absX, 'top': absY});
